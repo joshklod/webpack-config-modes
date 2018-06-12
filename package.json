@@ -1,0 +1,26 @@
+{
+  "name": "webpack-config-modes",
+  "version": "0.1.0",
+  "description": "Simple modal webpack configuration utility",
+  "main": "main.js",
+  "author": {
+    "name": "Josh Klodnicki",
+    "email": "joshklod@gmail.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshklod/webpack-config-modes.git"
+  },
+  "keywords": [
+    "webpack",
+    "config"
+  ],
+  "bugs": {
+    "url": "https://github.com/joshklod/webpack-config-modes/issues"
+  },
+  "homepage": "https://github.com/joshklod/webpack-config-modes#readme",
+  "dependencies": {
+    "webpack-merge": "^4.1.2"
+  }
+}
