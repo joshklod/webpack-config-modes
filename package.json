@@ -1,6 +1,6 @@
 {
   "name": "webpack-config-modes",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Simple modal webpack configuration utility",
   "main": "main.js",
   "author": {
@@ -8,6 +8,9 @@
     "email": "joshklod@gmail.com"
   },
   "license": "MIT",
+  "scripts": {
+    "test": "node test/test.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/joshklod/webpack-config-modes.git"
