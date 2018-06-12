@@ -1,7 +1,7 @@
 
 const merge = require('webpack-merge');
 
-module.exports = function configModes (configCb) {
+module.exports = function configModes (configArg) {
 	return env => {
 		const mode = {
 			dev:   (env == 'dev'),
@@ -13,7 +13,15 @@ module.exports = function configModes (configCb) {
 			}[env] || 'none'
 		};
 
-		const config = configCb(mode);
+		var config;
+		if (typeof configArg == 'function')
+			config = configArg(mode);
+		else if (typeof configArg == 'object' && !Array.isArray(configArg))
+			config = configArg;
+		else {
+			throw new TypeError('Argument must be an object or a function ' +
+				'of the form: `mode => object`');
+		}
 
 		return merge(
 			{ mode: mode.long },
