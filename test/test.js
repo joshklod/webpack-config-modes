@@ -1,6 +1,17 @@
+const {inspect} = require('util');
+
 const configModes = require(process.cwd());
 
 const args = process.argv.slice(2);
+
+function runTest (config, env) {
+	// This is the output of this module, which is fed to module.exports of
+	// webpack.config.js
+	const webpackConfig = configModes(config);
+
+	// Simulate webpack config resolution
+	return webpackConfig(env);
+}
 
 // Get tests to perform from command-line arguments
 var test = {
@@ -16,18 +27,26 @@ if (args.includes('all') || args.length == 0) {
 	});
 }
 
-// List of possible module arguments (`configModes(<config>)`)
-var configs = [];
+// Test different config argument types (`configModes(<config>)`)
 if (test.configs) {
-	configs.push(
+	const configs = [
 		{ common: {type: 'object'} },
 		mode => ({
 			common: { type: 'function' }
 		})
-	);
+	];
+	configs.forEach(config => {
+		const result = runTest(config);
+		console.log(inspect({
+			config: (Array.isArray(config) ? 'array' : typeof config),
+			result
+		}));
+	});
 }
+
+// Test for proper resolution of mode arguments
 if (test.modes) {
-	configs.push(mode => ({
+	const config = mode => ({
 		common: {
 			entry: 'src/file.js',
 			output: 'dist/file.js',
@@ -40,45 +59,19 @@ if (test.modes) {
 		development: {
 			output: 'dist/file.dev.js'
 		}
-	}));
-}
-
-// List of possible inputs for `webpack --env <mode>`
-var modes;
-if (test.modes) {
-	modes = [
+	});
+	const modes = [
 		'dev',
 		'prod',
 		'unknown',
 		'',
 		undefined
 	];
-} else {
-	modes = ['dev'];
+	modes.forEach(mode => {
+		const result = runTest(config, mode);
+		console.log(inspect({
+			mode,
+			result
+		}));
+	});
 }
-
-// Generate array of test parameters
-const tests = configs.reduce(
-	(arr, conf) => arr.concat(modes.map(mode => ({conf, mode}))),
-	[]
-);
-
-const results = tests.map(({conf, mode}) => {
-	// This is the output of this module, which is fed to module.exports of
-	// webpack.config.js
-	const webpackConfig = configModes(conf);
-
-	// Simulate webpack config resolution
-	const env = mode;
-	const result = webpackConfig(env);
-
-	return {
-		test: {
-			conf: (Array.isArray(conf) ? 'array' : typeof conf),
-			mode
-		},
-		result
-	};
-});
-
-console.log(require('util').inspect(results));
