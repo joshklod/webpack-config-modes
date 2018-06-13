@@ -4,7 +4,20 @@ const configModes = require(process.cwd());
 
 const args = process.argv.slice(2);
 
-function runTest (config, env) {
+const defaultConfig = mode => ({
+	common: {
+		using: 'default',
+		meta: mode
+	},
+	production: {
+		using: 'production'
+	},
+	development: {
+		using: 'development'
+	}
+});
+
+function runTest (config = defaultConfig, env) {
 	// This is the output of this module, which is fed to module.exports of
 	// webpack.config.js
 	const webpackConfig = configModes(config);
@@ -46,18 +59,6 @@ if (test.configs) {
 
 // Test for proper resolution of mode arguments
 if (test.modes) {
-	const config = mode => ({
-		common: {
-			using: 'default',
-			meta: mode
-		},
-		production: {
-			using: 'production'
-		},
-		development: {
-			using: 'development'
-		}
-	});
 	const modes = [
 		'dev',
 		'prod',
@@ -66,7 +67,7 @@ if (test.modes) {
 		undefined
 	];
 	modes.forEach(mode => {
-		const result = runTest(config, mode);
+		const result = runTest(undefined, mode);
 		console.log(inspect({
 			mode,
 			result
