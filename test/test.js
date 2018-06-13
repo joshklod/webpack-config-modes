@@ -48,16 +48,14 @@ if (test.configs) {
 if (test.modes) {
 	const config = mode => ({
 		common: {
-			entry: 'src/file.js',
-			output: 'dist/file.js',
-			prod: `We are ${mode.prod ? '' : 'not '}in production mode!`,
-			dev: `We are ${mode.dev ? '' : 'not '}in development mode!`
+			using: 'default',
+			meta: mode
 		},
 		production: {
-			output: 'dist/file.min.js'
+			using: 'production'
 		},
 		development: {
-			output: 'dist/file.dev.js'
+			using: 'development'
 		}
 	});
 	const modes = [
