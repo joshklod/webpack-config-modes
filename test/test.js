@@ -6,11 +6,20 @@ const configModes = require(process.cwd());
 
 const args = process.argv.slice(2);
 
-// Get tests to perform from command-line arguments
-var test = {
-	configs: false,
-	modes: false
+function initObject (propNames, value = undefined) {
+	var result = {};
+	propNames.forEach(name => result[name] = value);
+	return result;
 }
+
+// Tests to perform
+const testNames = [
+	'configs',
+	'modes'
+];
+var test = initObject(testNames, false);
+
+// Process command-line arguments
 if (args.includes('all') || args.length == 0) {
 	for (const key in test)
 		test[key] = true;
