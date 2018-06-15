@@ -6,6 +6,20 @@ const configModes = require(process.cwd());
 
 const args = process.argv.slice(2);
 
+// Get tests to perform from command-line arguments
+var test = {
+	configs: false,
+	modes: false
+}
+if (args.includes('all') || args.length == 0) {
+	for (const key in test)
+		test[key] = true;
+} else {
+	args.forEach(arg => {
+		test[arg] = true;
+	});
+}
+
 const defaultConfig = mode => ({
 	common: {
 		using: 'default',
@@ -26,20 +40,6 @@ function runTest (config = defaultConfig, env) {
 
 	// Simulate webpack config resolution
 	return webpackConfig(env);
-}
-
-// Get tests to perform from command-line arguments
-var test = {
-	configs: false,
-	modes: false
-}
-if (args.includes('all') || args.length == 0) {
-	for (const key in test)
-		test[key] = true;
-} else {
-	args.forEach(arg => {
-		test[arg] = true;
-	});
 }
 
 // Test different config argument types (`configModes(<config>)`)
