@@ -84,6 +84,7 @@ function runTest (config = defaultConfig, env) {
 
 // Test different config argument types (`configModes(<config>)`)
 if (test.configs) {
+	log.info('\n#### TESTING CONFIGS ####');
 	const configs = [
 		{ common: {type: 'object'} },
 		mode => ({
@@ -100,6 +101,7 @@ if (test.configs) {
 
 // Test for proper resolution of mode arguments
 if (test.modes) {
+	log.info('\n#### TESTING MODES ####');
 	const modes = [
 		'dev',
 		'prod',
