@@ -2,10 +2,13 @@
 
 const {inspect} = require('util');
 const {Console} = require('console');
+const DevNull = require('dev-null');
 
 const configModes = require(process.cwd());
 
 const args = process.argv.slice(2);
+
+const devnull = new DevNull();
 
 function initObject (propNames, value = undefined) {
 	var result = {};
@@ -41,12 +44,18 @@ const testNames = [
 // Enable all tests for `npm test` by checking for 0 arguments
 var test = initObject(testNames, (args.length == 0) ? true : false);
 
+// Disable console output by default
+var stdout = devnull;
+
 // Process command-line arguments
 args.forEach(arg => {
 	switch (arg) {
 		case 'all':
 			for (const key in test)
 				test[key] = true;
+			break;
+		case 'print':
+			stdout = process.stdout;
 			break;
 		default:
 			if (testNames.includes(arg)) {
@@ -58,7 +67,7 @@ args.forEach(arg => {
 	}
 });
 
-const log = new Logger(process.stdout, process.stderr);
+const log = new Logger(stdout, process.stderr);
 
 const defaultConfig = mode => ({
 	common: {
