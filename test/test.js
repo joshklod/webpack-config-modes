@@ -1,6 +1,7 @@
 'use strict';
 
 const {inspect} = require('util');
+const {Console} = require('console');
 
 const configModes = require(process.cwd());
 
@@ -10,6 +11,26 @@ function initObject (propNames, value = undefined) {
 	var result = {};
 	propNames.forEach(name => result[name] = value);
 	return result;
+}
+
+class Logger extends Console {
+	pretty () {
+		for (const obj of arguments) {
+			this.log(inspect(obj, {
+				depth: null,
+				colors: true
+			}));
+		}
+	}
+	group (label) {
+		this.pretty(label);
+		super.group();
+	}
+	grouped (label, ...args) {
+		this.group(label);
+		this.pretty.apply(this, args);
+		this.groupEnd();
+	}
 }
 
 // Tests to perform
@@ -36,6 +57,8 @@ args.forEach(arg => {
 			process.exit(1);
 	}
 });
+
+const log = new Logger(process.stdout, process.stderr);
 
 const defaultConfig = mode => ({
 	common: {
@@ -69,10 +92,9 @@ if (test.configs) {
 	];
 	configs.forEach(config => {
 		const result = runTest(config);
-		console.log(inspect({
-			config: (Array.isArray(config) ? 'array' : typeof config),
-			result
-		}));
+		const configType =
+			`[${Array.isArray(config) ? 'array' : typeof config}]`;
+		log.grouped(configType, result);
 	});
 }
 
@@ -87,9 +109,6 @@ if (test.modes) {
 	];
 	modes.forEach(mode => {
 		const result = runTest(undefined, mode);
-		console.log(inspect({
-			mode,
-			result
-		}));
+		log.grouped(mode, result);
 	});
 }
