@@ -28,7 +28,12 @@ args.forEach(arg => {
 				test[key] = true;
 			break;
 		default:
-			test[arg] = true;
+			if (testNames.includes(arg)) {
+				test[arg] = true;
+				break;
+			}
+			console.error(`Error: Unknown argument: '${arg}'`);
+			process.exit(1);
 	}
 });
 
