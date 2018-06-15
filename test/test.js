@@ -1,3 +1,5 @@
+'use strict';
+
 const {inspect} = require('util');
 
 const configModes = require(process.cwd());
@@ -32,7 +34,7 @@ var test = {
 	modes: false
 }
 if (args.includes('all') || args.length == 0) {
-	for (key in test)
+	for (const key in test)
 		test[key] = true;
 } else {
 	args.forEach(arg => {
