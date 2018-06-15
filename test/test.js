@@ -17,17 +17,20 @@ const testNames = [
 	'configs',
 	'modes'
 ];
-var test = initObject(testNames, false);
+// Enable all tests for `npm test` by checking for 0 arguments
+var test = initObject(testNames, (args.length == 0) ? true : false);
 
 // Process command-line arguments
-if (args.includes('all') || args.length == 0) {
-	for (const key in test)
-		test[key] = true;
-} else {
-	args.forEach(arg => {
-		test[arg] = true;
-	});
-}
+args.forEach(arg => {
+	switch (arg) {
+		case 'all':
+			for (const key in test)
+				test[key] = true;
+			break;
+		default:
+			test[arg] = true;
+	}
+});
 
 const defaultConfig = mode => ({
 	common: {
