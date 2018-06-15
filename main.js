@@ -6,7 +6,7 @@ module.exports = function configModes (configArg) {
 		const mode = {
 			dev:   (env == 'dev'),
 			prod:  (env == 'prod'),
-			short: env || 'none',
+			short: (['dev', 'prod'].includes(env)) ? env : 'none',
 			long: {
 				dev:  'development',
 				prod: 'production'
